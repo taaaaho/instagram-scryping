@@ -35,17 +35,13 @@ function insertReportData(userId) {
     // 記録用スプレッドシートの取得
     var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     var sheets = spreadsheet.getSheets();
-    for(var i=0; i < sheets.length; i++){
-      if(userId == sheets[i].getName()){
-        sheet = spreadsheet.getSheetByName(userId);
-      }
-    }
+    sheet = spreadsheet.getSheetByName('data');
     if(sheet == "" || sheet == null){
-      spreadsheet.insertSheet(userId);
-      sheet = spreadsheet.getSheetByName(userId);
-      sheet.appendRow(['日時','フォロワー数','フォロー数','ポスト数']);
+      spreadsheet.insertSheet('data');
+      sheet = spreadsheet.getSheetByName('data');
+      sheet.appendRow(['ユーザーID','日時','フォロワー数','フォロー数','ポスト数']);
     }
-    var lastRow = sheet.appendRow(data);
+    sheet.appendRow(data);
   } catch(e) {
     throw(e);
   }
@@ -70,7 +66,7 @@ function getData(userId) {
     //ポスト数
     var posts   = jsonData['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['count'];
     
-    var result = [today,followers,followings,posts];
+    var result = [userId,today,followers,followings,posts];
     return result;
   } catch(e) {
     throw(e);
